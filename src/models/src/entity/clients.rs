@@ -606,7 +606,7 @@ WHERE id = $20"#,
         client_dyn.token_endpoint_auth_method = token_endpoint_auth_method;
         client_dyn.last_used = Some(Utc::now().timestamp());
 
-        if *DYN_CLIENT_SECRET_AUTO_ROTATE {
+if *DYN_CLIENT_SECRET_AUTO_ROTATE {
             let (_secret_plain, registration_token) = Client::generate_new_secret()?;
             client_dyn.registration_token = registration_token;
         }
@@ -1427,7 +1427,9 @@ pub fn is_origin_external<'a>(
             ListenScheme::Http => scheme == "http",
             ListenScheme::Https => scheme == "https",
             ListenScheme::HttpHttps => scheme == "http" || scheme == "https",
+            #[cfg(not(target_os = "windows"))]
             ListenScheme::UnixHttp => scheme == "http",
+            #[cfg(not(target_os = "windows"))]
             ListenScheme::UnixHttps => scheme == "https",
         } || ADDITIONAL_ALLOWED_ORIGIN_SCHEMES
             .iter()

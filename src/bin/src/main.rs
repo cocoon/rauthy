@@ -564,6 +564,7 @@ async fn actix_main(app_state: web::Data<AppState>) -> std::io::Result<()> {
             app = app.service(swagger.clone());
         }
 
+        #[cfg(not(target_os = "windows"))]
         if matches!(
             app_state.listen_scheme,
             ListenScheme::UnixHttp | ListenScheme::UnixHttps
@@ -606,6 +607,7 @@ async fn actix_main(app_state: web::Data<AppState>) -> std::io::Result<()> {
                 .await
         }
 
+        #[cfg(not(target_os = "windows"))]
         ListenScheme::UnixHttp | ListenScheme::UnixHttps => {
             server.bind_uds(listen_addr)?.run().await
         }
