@@ -759,6 +759,26 @@ secret_api = "SuperSecureSecret1337"
 # overwritten by: HQL_INSECURE_COOKIE
 #insecure_cookie = false
 
+# To guarantee the stabiliy of your Raft cluster, you can
+# rate-limit all write operations to the Raft (excluding
+# management overhead). This is in request per second. It
+# guarantees that the cluster can never be overwhelmed
+# because maybe the disks cannot keep up. Usually, when
+# this happens, you would see dropped or missing heartbeats
+# and errors that the leader is down, even when the cluster
+# is healthy.
+# The burst can usually be 2-2x the rps.
+#
+# default: not set
+# overwritten by: HQL_RL_CACHE_RPS
+#rate_limit_cache_rps = 50000
+# overwritten by: HQL_RL_CACHE_BURST
+#rate_limit_cache_burst = 100000
+# overwritten by: HQL_RL_DB_RPS
+#rate_limit_db_rps = 100000
+# overwritten by: HQL_RL_DB_BURST
+#rate_limit_db_burst = 200000
+
 # You can reset the Raft Logs + Metadata when set to
 # `true`. This can be helpful, if you e.g. run a single
 # instance "cluster" and encountered an unrecoverable
@@ -1407,6 +1427,18 @@ key_active = 'bVCyTsGaggVy5yqQ'
 # default: 3600
 # overwritten by: EPHEMERAL_CLIENTS_CACHE_LIFETIME
 #cache_lifetime = 3600
+
+# RFC 8707: when an ephemeral client document declares no `allowed_resources`,
+# a requested `resource` is rejected by default. Setting this to `true` lets such
+# clients request any resource indicator.
+#
+# CAUTION: only enable this if you know exactly what you are doing and have a good
+# reason. It can lead to an easy privilege escalation, because an ephemeral client
+# could then mint tokens for an arbitrary audience.
+#
+# default: false
+# overwritten by: EPHEMERAL_CLIENTS_DANGER_ALLOW_UNVALIDATED_RESOURCE
+#danger_allow_unvalidated_resource = false
 
 [events]
 # The E-Mail address event notifications should be sent to.
@@ -2676,6 +2708,12 @@ storage_type = 'db'
 #regex_rust = '^[a-zA-Z0-9][a-zA-Z0-9-.]*[a-zA-Z0-9]$'
 # default: '^[a-z][a-z0-9_\-]{1,61}$'
 #pattern_html = '^[a-z][a-z0-9_\-]{1,61}$'
+
+# Configure a hint that will be shown to the user on pattern
+# mismatch.
+#
+# default: not set
+#pattern_hint = 'Linux-compatible Username'
 
 # If a user does not have a `preferred_username`, the `email`
 # can be used as a fallback value for the id token.
