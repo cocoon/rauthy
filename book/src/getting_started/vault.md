@@ -1,4 +1,4 @@
-# Rauthy + Vault config (short guide)
+# Rauthy + Vault config
 
 Support for loading the config from a Vault source was added in v0.31.0. To enable it, 
 set the environment variable `USE_VAULT_CONFIG=true` and include a [vault.toml](../../vault.toml) file, 
@@ -107,9 +107,7 @@ services:
     container_name: rauthy-test
     image: ghcr.io/sebadob/rauthy:0.31.0-20250703
     environment:
-      - DEV_MODE=true
-      #- HTTP_DANGER_UNENCRYPTED=true
-      #- HTTP_DANGER_INSECURE=true
+      - DANGER_VAULT_INSECURE=true
       - PUB_URL=${DOCKER_MACHINE_IP}:8443
       #- TLS_CERT=tls/cert-chain.pem
       #- TLS_KEY=tls/key.pem
@@ -203,9 +201,7 @@ services:
     container_name: rauthy-test
     image: ghcr.io/sebadob/rauthy:0.31.0-20250703
     environment:
-      - DEV_MODE=true
-      #- HTTP_DANGER_UNENCRYPTED=true
-      #- HTTP_DANGER_INSECURE=true
+      - DANGER_VAULT_INSECURE=true
       - PUB_URL=${DOCKER_MACHINE_IP}:8443
       #- TLS_CERT=tls/cert-chain.pem
       #- TLS_KEY=tls/key.pem
